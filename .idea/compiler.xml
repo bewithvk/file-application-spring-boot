@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="springboot-upload-download-file-rest-api-example" />
+        <module name="sprint_boot_task" />
+        <module name="spring_boot_task-unit-test" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="spring_boot_task-unit-test" options="-parameters" />
+      <module name="springboot-upload-download-file-rest-api-example" options="-parameters" />
+      <module name="sprint_boot_task" options="-parameters" />
+    </option>
+  </component>
+</project>
