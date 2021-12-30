@@ -23,6 +23,7 @@ public class FileDownloadController {
     private static final Logger logger = LoggerFactory.getLogger(FileDownloadController.class);
     private FileStorageService fileStorageService;
 
+    @Autowired
     public FileDownloadController(FileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;
     }
@@ -37,6 +38,7 @@ public class FileDownloadController {
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
+            ex.printStackTrace();
             logger.info("Could not determine file type.");
         }
 

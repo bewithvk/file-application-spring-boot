@@ -8,12 +8,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 
-
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-
+import java.io.File;
 import java.io.IOException;
 
 import static org.mockito.Mockito.when;
@@ -31,6 +31,12 @@ public class FileDownloadControllerTest {
     private Resource fileResource;
 
     @Mock
+    private File file;
+
+    @Mock
+    private ServletContext servletContext;
+
+    @Mock
     private HttpServletRequest request;
 
     private FileDownloadController fileDownloadController;
@@ -38,7 +44,6 @@ public class FileDownloadControllerTest {
 
     @Before
     public void setUp() {
-        // TODO fileResource = new FileSystemResource();
         fileDownloadController = new FileDownloadController(fileStorageService);
     }
 
@@ -46,11 +51,29 @@ public class FileDownloadControllerTest {
     public void validDownloadFile_ShouldGetFilesDownloaded() throws IOException {
 
          when(fileStorageService.loadFileAsResource(fileName)).thenReturn(fileResource);
-         when(fileResource.getFile().getAbsolutePath()).thenReturn("\\home\\Uday");
-         when(request.getServletContext().getMimeType("\\home\\Uday")).thenReturn(null);
+         when(fileResource.getFile()).thenReturn(file);
+         when(file.getAbsolutePath()).thenReturn("\\home\\Uday");
+         when(request.getServletContext()).thenReturn(servletContext);
+         when(servletContext.getMimeType("\\home\\Uday")).thenReturn("image/png");
 
-         fileDownloadController.downloadFile(fileName, request);
+         ResponseEntity responseEntity = fileDownloadController.downloadFile(fileName, request);
 
-        Assert.assertTrue("Example test case successful", true);
+         Assert.assertEquals(200, responseEntity.getStatusCodeValue());
+         Assert.assertEquals("image/png",responseEntity.getHeaders().getContentType().toString());
+    }
+
+    @Test
+    public void DownloadFileWithTypeNull_ShouldGetOctetFilesDownloaded() throws IOException {
+
+        when(fileStorageService.loadFileAsResource(fileName)).thenReturn(fileResource);
+        when(fileResource.getFile()).thenReturn(file);
+        when(file.getAbsolutePath()).thenReturn("\\home\\Uday");
+        when(request.getServletContext()).thenReturn(servletContext);
+        when(servletContext.getMimeType("\\home\\Uday")).thenReturn(null);
+
+        ResponseEntity responseEntity = fileDownloadController.downloadFile(fileName, request);
+
+        Assert.assertEquals(200, responseEntity.getStatusCodeValue());
+        Assert.assertEquals("application/octet-stream",responseEntity.getHeaders().getContentType().toString());
     }
 }

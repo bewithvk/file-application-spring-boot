@@ -1,26 +1,24 @@
 package com.ikea.filehandling.service;
 
 import java.io.File;
+import java.nio.file.*;
 import java.util.ArrayList;
-
-
 
 public class FileService {
     public ArrayList<String> listFilesForFolder(final File folder, String namePattern) {
         ArrayList<String> files = new ArrayList<>();
+        String pattern = namePattern; //"*.{txt,doc}";
 
-        String strPattern = namePattern;//"^[a-zA-Z0-9._ -]+\\.(doc|pdf|csv|xls)$";
+        FileSystem fs = FileSystems.getDefault();
+        final PathMatcher matcher = fs.getPathMatcher("glob:" + pattern);
 
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
                 listFilesForFolder(fileEntry, namePattern);
             } else {
-                if (fileEntry.getName().equals(strPattern)){
+                if (matcher.matches(Paths.get(fileEntry.getName()))) {
                     files.add(fileEntry.getName());
-                }else{
-                    files.add("No file matches!");
                 }
-
             }
         }
         return files;
