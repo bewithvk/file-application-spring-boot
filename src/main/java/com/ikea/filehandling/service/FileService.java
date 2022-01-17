@@ -1,9 +1,12 @@
 package com.ikea.filehandling.service;
 
+import org.springframework.stereotype.Service;
+
 import java.io.File;
 import java.nio.file.*;
 import java.util.ArrayList;
 
+@Service
 public class FileService {
     public ArrayList<String> listFilesForFolder(final File folder, String namePattern) {
         ArrayList<String> files = new ArrayList<>();

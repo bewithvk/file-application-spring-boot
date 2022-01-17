@@ -18,11 +18,16 @@ import com.ikea.filehandling.service.FileStorageService;
 @RestController
 public class FileUploadController {
 
-    @Autowired
-    private FileStorageService fileStorageService;
 
-    FileService fileService =  new FileService();
+    private FileStorageService fileStorageService;
+    FileService fileService;
     final File folder = new File("/Users/ukkumary/Desktop/file_directories");
+
+    @Autowired
+    public FileUploadController(FileStorageService fileStorageService, FileService fileService) {
+        this.fileStorageService = fileStorageService;
+        this.fileService = fileService;
+    }
 
     /**
      * Fetch files form folder as per given reg-ex.
@@ -46,7 +51,7 @@ public class FileUploadController {
     public Response frequentWords(@RequestParam("file") MultipartFile file1) throws IOException {
         String fileName = fileStorageService.storeFile(file1);
 
-        File file = new File("uploads/"+fileName);
+        File file = File.createTempFile(fileName, ".txt");
         FileUtil fileUtil = new FileUtil();
         LineNumberReader lineNumberReader = null;
 
