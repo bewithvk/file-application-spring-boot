@@ -48,10 +48,14 @@ public class FileUploadController {
      * @return Json.
      */
     @PostMapping("/api/v1/frequent_words")
-    public Response frequentWords(@RequestParam("file") MultipartFile file1) throws IOException {
-        String fileName = fileStorageService.storeFile(file1);
+    public Response frequentWords(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+        String fileName = fileStorageService.storeFile(multipartFile);
 
         File file = File.createTempFile(fileName, ".txt");
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(multipartFile.getBytes());
+        fos.close();
+
         FileUtil fileUtil = new FileUtil();
         LineNumberReader lineNumberReader = null;
 
