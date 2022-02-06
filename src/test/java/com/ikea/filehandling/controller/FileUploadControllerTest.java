@@ -3,15 +3,13 @@ package com.ikea.filehandling.controller;
 import com.ikea.filehandling.payload.Response;
 import com.ikea.filehandling.service.FileService;
 import com.ikea.filehandling.service.FileStorageService;
-import org.apache.tomcat.util.http.fileupload.FileUpload;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 
 import javax.servlet.ServletContext;
@@ -20,13 +18,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.when;
-
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class FileUploadControllerTest {
 
     @Mock
@@ -51,7 +48,7 @@ public class FileUploadControllerTest {
     String fileName = "test";
     final File folder = new File("/Users/ukkumary/Desktop/file_directories");
 
-    @Before
+    @BeforeEach
     public void setUp() {
         fileUploadController = new FileUploadController(fileStorageService, fileService);
     }
@@ -65,7 +62,7 @@ public class FileUploadControllerTest {
         when(fileService.listFilesForFolder(folder, "xyz")).thenReturn(fileList);
         List<String> response = fileUploadController.getFiles("xyz");
 
-        Assert.assertEquals(fileList.get(1), response.get(1));
+        assertEquals(fileList.get(1), response.get(1));
     }
 
     @Test
@@ -77,7 +74,7 @@ public class FileUploadControllerTest {
         Response response = fileUploadController.frequentWords(file);
 
 //        Assert.assertTrue(response.getRes().containsKey("are"));
-        Assert.assertFalse(response.getRes().isEmpty());
+        assertFalse(response.getRes().isEmpty());
 
     }
 }
